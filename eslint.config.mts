@@ -1,21 +1,35 @@
-import js from "@eslint/js"
-import globals from "globals"
-import prettier from "eslint-config-prettier"
+import eslintPluginReact from 'eslint-plugin-react'
+import eslintPluginReactHooks from 'eslint-plugin-react-hooks'
+import tseslint from 'typescript-eslint'
+import js from '@eslint/js'
 
-/** @type {import('eslint').Linter.config[]} */
-
-export default[
-    js.configs.recommended,
-    {
-        files:["**/*.ts"],
-        languageOptions:{
-            globals:{...globals.browser, ...globals.node},
-            parserOption:{
-                ecmaFeatures:{
-                    tsx:true
-                }
-            }
-        }
+export default [
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    plugins: {
+      react: eslintPluginReact,
+      'react-hooks': eslintPluginReactHooks,
     },
-    prettier
+    languageOptions: {
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
+    rules: {
+      'react/jsx-uses-react': 'off',
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'warn',
+    },
+  },
 ]
